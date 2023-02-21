@@ -66,12 +66,11 @@ public class NoteListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //abre la actividad sin mostrar nada en especifico
                 Intent intent = new Intent(NoteListActivity.this, NoteActivity.class);
-                NoteInfo note = (NoteInfo) listnote.getItemAtPosition( i ); //obtener objeto clickeado
+              //  NoteInfo note = (NoteInfo) listnote.getItemAtPosition( i ); //obtener objeto clickeado
 
                 //agregar como extra elemento seleccionado
                 //para enviar un objeto noteinfo se esta haciendo uso de parcelable, para permitir enviar reference type via intentos
-                intent.putExtra(NoteActivity.NOTE_INFO,note);
-
+                intent.putExtra(NoteActivity.NOTE_POSITION,i);
                 startActivity(intent);
             }
         });

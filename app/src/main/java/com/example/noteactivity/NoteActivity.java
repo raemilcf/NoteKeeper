@@ -24,7 +24,8 @@ public class NoteActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityContentNoteBinding binding;
 
-    public static final String NOTE_INFO= "com.example.noteactivity.NOTE_INFO";
+    public static final int POSITION_NOT_SET= -1;
+    public static final String NOTE_POSITION= "com.example.noteactivity.NOTE_POSITION";
     NoteInfo mNote;
     boolean misNewNote;
 
@@ -64,8 +65,13 @@ public class NoteActivity extends AppCompatActivity {
 
         //obtener referencia enviada usando parcelable 
         Intent intent = getIntent();
-        mNote = intent.getParcelableExtra(NOTE_INFO);
-        misNewNote= mNote==null;
+        //mNote = intent.getParcelableExtra(NOTE_POSITION);
+        int postion= intent.getIntExtra(NOTE_POSITION,POSITION_NOT_SET);
+        //misNewNote= mNote== null;
+        misNewNote= postion == POSITION_NOT_SET;
+
+        if(!misNewNote)
+            mNote= DataManager.getInstance().getNotes().get(postion);
     }
 
 }
