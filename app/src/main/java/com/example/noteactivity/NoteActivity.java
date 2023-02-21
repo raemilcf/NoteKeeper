@@ -1,5 +1,6 @@
 package com.example.noteactivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -23,6 +24,10 @@ public class NoteActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityContentNoteBinding binding;
 
+    public static final String NOTE_INFO= "com.example.noteactivity.NOTE_INFO";
+    NoteInfo mNote;
+    boolean misNewNote;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +42,30 @@ public class NoteActivity extends AppCompatActivity {
         binding.contentNote.spContentNote.setAdapter(courseInfoArrayAdapter);
 
 
+        //leer los intent
+        readDisplayStateValue();
+
+        //mostrar las notas seleccionadas
+        if(!misNewNote)
+            displayNote();
+    }
+    //llamar campos en el content_activity y llenamos con el noteinfo  seleccionado
+    private void displayNote() {
+        List<CourseInfo> courses = DataManager.getInstance().getCourses();
+        int courseIndex = courses.indexOf(mNote.getCourse());
+
+        binding.contentNote.spContentNote.setSelection(courseIndex);
+        binding.contentNote.etFirstEditText.setText(mNote.getTitle());
+        binding.contentNote.etSecondEditText.setText(mNote.getText());
+
+    }
+
+    private void readDisplayStateValue() {
+
+        //obtener referencia enviada usando parcelable 
+        Intent intent = getIntent();
+        mNote = intent.getParcelableExtra(NOTE_INFO);
+        misNewNote= mNote==null;
     }
 
 }

@@ -38,8 +38,8 @@ public class NoteListActivity extends AppCompatActivity {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               //crear una instancia de new noteActivity para crear una activity new
+                startActivity(new Intent(NoteListActivity.this, NoteActivity.class));
             }
         });
 
@@ -48,7 +48,7 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void initDisplayContent(){
         //cargar id a utilizar
-        ListView listnote = binding.contentNoteList.lvContentNoteList;
+        final ListView listnote = binding.contentNoteList.lvContentNoteList;
 
         //carga data a mostrar
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
@@ -66,6 +66,12 @@ public class NoteListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //abre la actividad sin mostrar nada en especifico
                 Intent intent = new Intent(NoteListActivity.this, NoteActivity.class);
+                NoteInfo note = (NoteInfo) listnote.getItemAtPosition( i ); //obtener objeto clickeado
+
+                //agregar como extra elemento seleccionado
+                //para enviar un objeto noteinfo se esta haciendo uso de parcelable, para permitir enviar reference type via intentos
+                intent.putExtra(NoteActivity.NOTE_INFO,note);
+
                 startActivity(intent);
             }
         });

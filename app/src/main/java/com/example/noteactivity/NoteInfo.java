@@ -2,8 +2,11 @@ package com.example.noteactivity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 
-public final class NoteInfo {
+import androidx.annotation.NonNull;
+
+public final class NoteInfo implements  Parcelable {
     private CourseInfo mCourse;
     private String mTitle;
     private String mText;
@@ -12,6 +15,15 @@ public final class NoteInfo {
         mCourse = course;
         mTitle = title;
         mText = text;
+    }
+
+    //private constructor for parcel
+    private NoteInfo(Parcel parcel) {
+        //parcel values must be accessed in the same order they were written
+
+        mText= parcel.readString();
+        mTitle= parcel.readString();
+        mCourse= parcel.readParcelable(CourseInfo.class.getClassLoader()); //course info is a reference type
     }
 
     public CourseInfo getCourse() {
@@ -62,4 +74,32 @@ public final class NoteInfo {
         return getCompareKey();
     }
 
+
+    //implement parceable
+    //when making a type parcelable, all contained reference types mus also be parcelable
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+
+        parcel.writeString(mTitle);
+        parcel.writeString(mText);
+        parcel.writeParcelable(mCourse,0);
+    }
+
+    public static final Parcelable.Creator<NoteInfo> CREATOR =
+            new Parcelable.Creator<NoteInfo>(){
+                @Override
+                public NoteInfo createFromParcel(Parcel parcel) {
+                    return new NoteInfo(parcel); //return private constructor
+                }
+
+                @Override
+                public NoteInfo[] newArray(int size) {
+                    return new NoteInfo[size];
+                }
+            };
 }
