@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NoteListActivity">
+    tools:context=".NoteListActivity"
+    >
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -16,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.NoteActivity.PopupOverlay" />
+            app:popupTheme="@style/Theme.NoteActivity.PopupOverlay"
+            app:title="@string/noteKeeper"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,6 +33,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:src="@drawable/ic_baseline_edit_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

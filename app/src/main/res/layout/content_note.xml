@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></Spinner>
@@ -24,19 +24,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spContentNote"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp">
+        android:layout_marginStart="32dp"
+        >
 
     </EditText>
     <EditText
         android:id="@+id/etSecondEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:textSize="14dp"
+        android:inputType="text|textMultiLine"
+        android:gravity="top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etFirstEditText"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp">
 
@@ -52,12 +56,14 @@
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="8dp"
+
         >
         <Button
             android:id= "@+id/btnCancel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/cancel"
+
             />
 
 
