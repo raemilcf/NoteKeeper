@@ -76,6 +76,7 @@ public class NoteActivity extends AppCompatActivity {
         if(!misNewNote)
             displayNote();
 
+        //agregar funcion al boton descartar cambios, si se clica no se almacenan los cambios realizados
         binding.contentNote.btnCancel.setOnClickListener(v->{
                 mIsCancelling =true;
                 finish(); //activity ends
@@ -100,9 +101,8 @@ public class NoteActivity extends AppCompatActivity {
         int courseIndex = courses.indexOf(mNote.getCourse());
 
         binding.contentNote.spContentNote.setSelection(courseIndex);
-        binding.contentNote.etFirstEditText.setText(mNote.getTitle());
-        binding.contentNote.etSecondEditText.setText(mNote.getText());
-
+        binding.contentNote.etTitle.setText(mNote.getTitle());
+        binding.contentNote.etText.setText(mNote.getText());
     }
 
     private void readDisplayStateValue() {
@@ -111,11 +111,10 @@ public class NoteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //mNote = intent.getParcelableExtra(NOTE_POSITION);
         int postion= intent.getIntExtra(NOTE_POSITION,POSITION_NOT_SET);
-        //misNewNote= mNote== null;
         misNewNote= postion == POSITION_NOT_SET;
 
         if(misNewNote){
-            createNewNote();
+           // createNewNote();
         }else {
             mNote= DataManager.getInstance().getNotes().get(postion);
         }
@@ -127,9 +126,9 @@ public class NoteActivity extends AppCompatActivity {
         mNotePosition = dm.createNewNote();
 
         mNote= dm.getNotes().get(mNotePosition);
-
     }
 
+    //crear menu de opciones
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -154,9 +153,9 @@ public class NoteActivity extends AppCompatActivity {
         //traer detalles del curso seleccionado
         CourseInfo course = (CourseInfo) binding.contentNote.spContentNote.getSelectedItem();
        //cargar asunto y body que llevara el correo
-        String subject = binding.contentNote.etFirstEditText.getText().toString();
-        String body= "Check whar I learned in the Pluralsight course \"" +
-                course.getTitle() + "\"\n" +  binding.contentNote.etSecondEditText.getText().toString();
+        String subject = binding.contentNote.etTitle.getText().toString();
+        String body= "Check what I learned in the Pluralsight course \"" +
+                course.getTitle() + "\"\n" +  binding.contentNote.etText.getText().toString();
 
         //identificar a donde enviaremos la info
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -204,8 +203,18 @@ public class NoteActivity extends AppCompatActivity {
 
     private void saveNote(){
         //save notes when back button is pressed
+
+        //si esta vacio ambos campos, no guarda nada
+        if(binding.contentNote.etText.getText().toString().isEmpty() && binding.contentNote.etTitle.getText().toString().isEmpty() )
+            return;
+
+        //si es nuevo crear nueva nota
+        if(misNewNote)
+            createNewNote();
+
+        //de lo contrario solo agrega los campos a la nota existente
         mNote.setCourse((CourseInfo)  binding.contentNote.spContentNote.getSelectedItem());
-        mNote.setTitle(binding.contentNote.etFirstEditText.getText().toString());
-        mNote.setText(binding.contentNote.etSecondEditText.getText().toString());
+        mNote.setTitle(binding.contentNote.etTitle.getText().toString());
+        mNote.setText(binding.contentNote.etText.getText().toString());
     }
 }
