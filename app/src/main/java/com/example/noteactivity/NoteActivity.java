@@ -75,6 +75,12 @@ public class NoteActivity extends AppCompatActivity {
         //mostrar las notas seleccionadas
         if(!misNewNote)
             displayNote();
+
+        binding.contentNote.btnCancel.setOnClickListener(v->{
+                mIsCancelling =true;
+                finish(); //activity ends
+
+        });
     }
 
     private void saveOriginalNoteValues() {
@@ -138,9 +144,6 @@ public class NoteActivity extends AppCompatActivity {
        if(item.getItemId()== R.id.sendEmail){
            sendEmail();
            return true;
-       }else if (item.getItemId() == R.id.cancel){
-            mIsCancelling =true;
-            finish(); //activity ends
        }
 
         return super.onOptionsItemSelected(item);

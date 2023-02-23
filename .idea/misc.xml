@@ -9,8 +9,12 @@
         <entry key="app/src/main/res/layout/activity_note_list.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.1890625" />
         <entry key="app/src/main/res/layout/content_note.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/content_note_list.xml" value="0.38256410256410256" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.38256410256410256" />
+        <entry key="app/src/main/res/layout/fragment_first2.xml" value="0.38256410256410256" />
         <entry key="app/src/main/res/layout/fragment_first3.xml" value="0.203125" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.203125" />
+        <entry key="app/src/main/res/layout/fragment_second2.xml" value="0.38256410256410256" />
         <entry key="app/src/main/res/layout/fragment_second3.xml" value="0.203125" />
         <entry key="app/src/main/res/menu/menu_note.xml" value="0.20208333333333334" />
       </map>

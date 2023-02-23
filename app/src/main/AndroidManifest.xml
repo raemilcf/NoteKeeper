@@ -32,10 +32,6 @@
             android:label="@string/title_activity_content_note"
             android:theme="@style/Theme.NoteActivity.NoActionBar" />
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" >
-        </activity>
     </application>
 
 </manifest>
