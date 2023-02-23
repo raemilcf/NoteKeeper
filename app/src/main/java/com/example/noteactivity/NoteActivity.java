@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -35,6 +37,8 @@ public class NoteActivity extends AppCompatActivity {
     int mNotePosition;
     boolean mIsCancelling;
 
+    private NoteActivityViewModel mNoteActivityViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,20 @@ public class NoteActivity extends AppCompatActivity {
         binding = ActivityContentNoteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
+
+        //create view model
+        ViewModelProvider viewModelProvider= new ViewModelProvider(getViewModelStore(),
+                (ViewModelProvider.Factory) ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
+        mNoteActivityViewModel = viewModelProvider.get(NoteActivityViewModel.class);
+
+        //load last state of the app - only if is destroy
+        if(mNoteActivityViewModel.mIsNewlyCreated && savedInstanceState!=null)
+            mNoteActivityViewModel.restoreState(savedInstanceState);
+
+
+        //set to false indicating is not new instance
+        mNoteActivityViewModel.mIsNewlyCreated= false;
+
 
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
         ArrayAdapter<CourseInfo> courseInfoArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, courses);
@@ -51,11 +69,25 @@ public class NoteActivity extends AppCompatActivity {
 
         //leer los intent
         readDisplayStateValue();
+        //save original values of the noteinfo
+        saveOriginalNoteValues();
 
         //mostrar las notas seleccionadas
         if(!misNewNote)
             displayNote();
     }
+
+    private void saveOriginalNoteValues() {
+        if(misNewNote)
+            return;
+
+        //save original values of note
+        mNoteActivityViewModel.mOriginalNoteCourseId = mNote.getCourse().getCourseId();
+        mNoteActivityViewModel.mOriginalNoteTitle = mNote.getTitle();
+        mNoteActivityViewModel.mOriginalNoteText = mNote.getText();
+
+    }
+
     //llamar campos en el content_activity y llenamos con el noteinfo  seleccionado
     private void displayNote() {
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
@@ -84,6 +116,7 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     private void createNewNote() {
+        //create new note in datamanager
         DataManager dm= DataManager.getInstance();
         mNotePosition = dm.createNewNote();
 
@@ -132,19 +165,42 @@ public class NoteActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause() { //when backbutton is pressed , save, create o cancel changes
         super.onPause();
 
         if(mIsCancelling){
-            if(misNewNote)
+            if(misNewNote){
                 DataManager.getInstance().removeNote(mNotePosition);
+
+            }else {
+
+                storePreviousNoteValue();
+            }
         }else {
             //save the note
             saveNote();
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(outState!=null)
+            mNoteActivityViewModel.saveState(outState);
+
+    }
+
+    private void storePreviousNoteValue() {
+        //asign previous value to course info, when cancel button is pressed, or after email sent and cancel is hit
+        CourseInfo courseInfo= DataManager.getInstance().getCourse(mNoteActivityViewModel.mOriginalNoteCourseId);
+        mNote.setCourse(courseInfo);
+        mNote.setTitle(mNoteActivityViewModel.mOriginalNoteTitle);
+        mNote.setText(mNoteActivityViewModel.mOriginalNoteText);
+    }
+
     private void saveNote(){
+        //save notes when back button is pressed
         mNote.setCourse((CourseInfo)  binding.contentNote.spContentNote.getSelectedItem());
         mNote.setTitle(binding.contentNote.etFirstEditText.getText().toString());
         mNote.setText(binding.contentNote.etSecondEditText.getText().toString());
